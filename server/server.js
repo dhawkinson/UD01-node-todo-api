@@ -62,7 +62,7 @@ app.delete('/todos/:id', (req, res) => {
         if (!todo) {
             return res.status(404).send();       //  no todo send 404 & empty todo
         }
-        res.send(todo);                          //  todo removed send 200 & todo
+        res.send({todo});                        //  todo removed send 200 & todo
     }).catch((e) => {
         res.status(400).send();                  //  error -> return 400 with empty body
     });
