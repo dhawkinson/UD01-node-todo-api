@@ -1,5 +1,7 @@
 'use strict';
 
+require('./config/config');     //  configure the app
+
 const {ObjectID} = require('mongodb');
 const express    = require('express');
 const bodyParser = require('body-parser');
