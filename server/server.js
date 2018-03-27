@@ -17,6 +17,7 @@ const port       = process.env.PORT || 3000;    //  set up dynamic PORT declarat
 
 app.use(bodyParser.json());
 
+//  todos endpoints
 app.post('/todos', (req, res) => {
     let todo = new Todo({
         text: req.body.text
@@ -96,6 +97,21 @@ app.patch('/todos/:id', (req, res) => {
         res.send({todo});
     }).catch((e) => {
         res.status(400).send();
+    })
+});
+
+//  users endpoints
+app.post('/users', (req, res) => {
+    let id   = req.params.id;
+    let body = _.pick(req.body, ['email', 'password']);
+    let user = new User(body);
+
+    user.save().then(() => {
+        return user.generateAuthToken();
+    }).then((token) => {
+        res.header('x-auth', token).send(user); //  send custom header (value = token) for auth purposes (jwt token scheme)
+    }).catch((e) => {
+        res.status(400).send(e);
     })
 });
 
