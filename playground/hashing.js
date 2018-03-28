@@ -2,7 +2,22 @@
 
 const {SHA256}  = require('crypto-js');
 const jwt       = require('jsonwebtoken');
+const bcrypt    = require('bcryptjs');
 
+let password = '123abc!';
+
+//  generate the salt for the hashing algorithm
+/*bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(password, salt, (err, hash) => {
+        console.log(hash);
+    });
+});*/
+
+let hashedPassword = '$2a$10$UAyLF0mHwby1Wa0DTLeGXOILK4VO229i54uZtGpAF3XhdIAgm4rXG'
+
+bcrypt.compare(password, hashedPassword, (err, res) => {
+    console.log(res);
+});
 
 /*
 //  this is the manual version
@@ -33,7 +48,6 @@ if ( resultHash === token.hash ) {
 } else {
     console.log('Data was changed. Do NOT trust!');
 }
-*/
 
 // this is the preferred method
 
@@ -46,3 +60,4 @@ console.log(token);
 
 let decoded =jwt.verify(token, '123abcc');
 console.log('Decoded ', decoded);
+*/
