@@ -2,22 +2,24 @@
 
 require('./config/config');     //  configure the app
 
-const {ObjectID} = require('mongodb');
-const express    = require('express');
-const bodyParser = require('body-parser');
-const _          = require('lodash');
+const _              = require('lodash');
+const express        = require('express');
+const bodyParser     = require('body-parser');
+const {ObjectID}     = require('mongodb');
 
-const {mongoose} = require('./db/mongoose');
-const {Todo}     = require('./models/todo');
-const {User}     = require('./models/user');
+const {mongoose}     = require('./db/mongoose');
+const {Todo}         = require('./models/todo');
+const {User}         = require('./models/user');
+const {authenticate} = require('./middleware/authenticate');
 
-const app        = express();
-
-const port       = process.env.PORT || 3000;    //  set up dynamic PORT declaration
+const app            = express();
+const port           = process.env.PORT || 3000;    //  set up dynamic PORT declaration
 
 app.use(bodyParser.json());
 
-//  todos endpoints
+/*==================================================
+    Todos routes
+==================================================*/
 app.post('/todos', (req, res) => {
     let todo = new Todo({
         text: req.body.text
@@ -100,19 +102,24 @@ app.patch('/todos/:id', (req, res) => {
     })
 });
 
-//  users endpoints
+/*==================================================
+    Users routes
+==================================================*/
 app.post('/users', (req, res) => {
-    let id   = req.params.id;
     let body = _.pick(req.body, ['email', 'password']);
     let user = new User(body);
 
     user.save().then(() => {
         return user.generateAuthToken();
     }).then((token) => {
-        res.header('x-auth', token).send(user); //  send custom header (value = token) for auth purposes (jwt token scheme)
+        res.header('x-auth', token).send(user); //  send custom header (x-)
     }).catch((e) => {
         res.status(400).send(e);
     })
+});
+
+app.get('/users/me', authenticate, (req, res) => {
+    res.send(req.user);
 });
 
 app.listen(port, () => {
