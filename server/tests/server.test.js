@@ -1,29 +1,19 @@
 'use strict';
 
-const expect        = require('expect');
-const request       = require('supertest');
-const {ObjectID}    = require('mongodb');
+const expect       = require('expect');
+const request      = require('supertest');
+const {ObjectID}   = require('mongodb');
 
-const {app}         = require('./../server');
-const {Todo}        = require('./../models/todo');
+const {app}        = require('./../server');
+const {Todo}       = require('./../models/todo');
+const {todos, 
+    populateTodos, 
+    users, 
+    populateUsers} = require('./seed/seed');
 
-//  build seeding todos
-const todos = [{
-    _id: new ObjectID(),
-    text: 'First test todo'
-}, {
-    _id: new ObjectID(),
-    text: 'Second test todo',
-    completed: true,
-    completedAt: 1521941218321
-}];
-
-//  remove all items before the EACH test
-beforeEach((done) => {
-    Todo.remove({}).then(() => {
-        return Todo.insertMany(todos);
-    }).then(() => done());
-});
+//  remove & repopulate all items before the EACH test
+beforeEach(populateUsers);
+beforeEach(populateTodos);
 
 //  post a todo to the collection
 describe('POST /todos', () => {
