@@ -1,5 +1,5 @@
-# node-todo-api
-## Node API using MongoDB
+# UD01-node-todo-api
+Node API using MongoDB
 
 An exercise in database maintenance, using Node and Mongo.
 
@@ -10,4 +10,3 @@ An exercise in database maintenance, using Node and Mongo.
   * Read
   * Update
   * Delete
-# node-todo-api
